@@ -18,4 +18,8 @@
   <mappers>
     <mapper resource="mybatis/mappers/StockOutOrderMapper.xml"/>
   </mappers>
+
+  <!--<typeAliases>-->
+  <!--<typeAlias alias="StockOutOrder" type="mybatis.model.StockOutOrder"/>-->
+  <!--</typeAliases>-->
 </configuration>

@@ -3,7 +3,81 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mybatis.persist.StockOutOrderMapper">
-  <select id="findById" resultType="mybatis.model.StockOutOrder">
-    select * from stock_out_order where id = #{id}
+  <resultMap id="RmStockOutOrder" type="mybatis.model.StockOutOrder">
+    <id property="id" column="id"/>
+    <result property="bundleId" column="bundle_id"/>
+    <!--<result property="whId" column="wh_id"/>-->
+    <!--<result property="structureType" column="structure_type"/>-->
+    <!--<result property="orderType" column="order_type"/>-->
+    <result property="operatorId" column="operator_id"/>
+    <!--<result property="status" column="order_status"/>-->
+    <!--<result property="srcOrderType" column="src_order_type"/>-->
+    <result property="srcOrderId" column="src_order_id"/>
+    <result property="skuId" column="sku_id"/>
+    <result property="quantity" column="quantity"/>
+    <result property="outerItemName" column="outer_item_name"/>
+    <result property="receiverName" column="receiver_name"/>
+    <result property="receiverTel" column="receiver_tel"/>
+    <result property="receiverIdCard" column="receiver_id_card"/>
+    <result property="province" column="province"/>
+    <result property="city" column="city"/>
+    <result property="district" column="district"/>
+    <result property="road" column="road"/>
+    <result property="gmtPush" column="gmt_push"/>
+    <result property="logisticsName" column="logistics_name"/>
+    <result property="logisticsTicket" column="logistics_ticket"/>
+    <result property="gmtSend" column="gmt_send"/>
+    <result property="gmtCreate" column="gmt_create"/>
+    <result property="gmtUpdate" column="gmt_update"/>
+  </resultMap>
+  <resultMap id="RmRootStockOutOrder" type="mybatis.model.StockOutOrder" extends="RmStockOutOrder">
+    <collection property="subOrders" column="bundle_id" javaType="ArrayList" ofType="mybatis.model.StockOutOrder" select="findSubsByBundleId"/>
+  </resultMap>
+
+  <sql id="StockOutOrderSelectFields">
+    bundle_id,
+    wh_id,
+    structure_type,
+    order_type,
+    operator_id,
+    order_status,
+    src_order_type,
+    src_order_id,
+    sku_id,
+    quantity,
+    outer_item_name,
+    receiver_name,
+    receiver_tel,
+    AES_DECRYPT(UNHEX(receiver_id_card),'U2FsdGVk') AS receiver_id_card,
+    province,
+    city,
+    district,
+    road
+  </sql>
+
+  <sql id="StockOutOrderFields">
+    id,
+    <include refid="StockOutOrderSelectFields"/>,
+    gmt_push,
+    logistics_name,
+    logistics_ticket,
+    gmt_send,
+    gmt_create,
+    gmt_update
+  </sql>
+
+  <select id="findById" resultMap="RmRootStockOutOrder">
+    SELECT *
+    FROM stock_out_order
+    WHERE id = #{id}
+      AND structure_type = 1
+      AND order_status <![CDATA[<>]]> 16
+  </select>
+  <select id="findSubsByBundleId" resultMap="RmStockOutOrder">
+    SELECT *
+    FROM stock_out_order
+    WHERE bundle_id = #{bundle_id}
+      AND structure_type = 2
+      AND order_status <![CDATA[<>]]> 16
   </select>
 </mapper>

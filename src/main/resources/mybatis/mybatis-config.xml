@@ -3,6 +3,15 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+  <typeAliases>
+  <typeAlias alias="StockOutOrder" type="mybatis.model.StockOutOrder"/>
+  </typeAliases>
+
+  <typeHandlers>
+    <typeHandler handler="mybatis.persist.StructureTypeHandler"
+      javaType="mybatis.model.StructureType"/>
+  </typeHandlers>
+
   <environments default="development">
     <environment id="development">
       <transactionManager type="JDBC"/>
@@ -18,8 +27,4 @@
   <mappers>
     <mapper resource="mybatis/mappers/StockOutOrderMapper.xml"/>
   </mappers>
-
-  <!--<typeAliases>-->
-  <!--<typeAlias alias="StockOutOrder" type="mybatis.model.StockOutOrder"/>-->
-  <!--</typeAliases>-->
 </configuration>

@@ -19,7 +19,7 @@ public class StockOutOrder implements Serializable {
   private String bundleId;
 //  private Warehouse whId;
 //  private StockOutOrderType orderType;
-//  private StructureType structureType;
+  private StructureType structureType;
   private long operatorId;
 //  private StockOutOrderStatus status;
 //  private SrcOrderType srcOrderType;
